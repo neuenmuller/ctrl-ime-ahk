@@ -4,8 +4,12 @@
 ; 右 Ctrl キーの空打ちで IME を「かな」に切り替え
 ; Ctrl キーを押している間に他のキーを打つと通常の Ctrl キーとして動作
 ;
-; AutoHotkey: v1.1.26.01
+; AutoHotkey: v1.1.33.00
+; Author:     Miraium  https://github.com/Miraium/ctrl-ime-ahk
+; 
+; 以下フォーク元
 ; Author:     karakaram   http://www.karakaram.com/alt-ime-on-off
+; Author:     moremorefor  https://github.com/moremorefor/ctrl-ime-ahk
 
 #Include IME.ahk
 
@@ -110,12 +114,17 @@
 *~PgDn::
 *~LCtrl::
 *~RCtrl::
+*~Backspace::
     Return
 
 ; 左 Ctrl 空打ちで IME を OFF
 LCtrl up::
     if (A_PriorHotkey == "*~LCtrl")
     {
+        ; IME on状態で入力途中（日本語入力途中）に押した場合には、無反応になるように設定
+        if IME_GetConverting() >= 1 {
+            Return
+        }
         IME_SET(0)
     }
     Return
@@ -127,3 +136,4 @@ RCtrl up::
         IME_SET(1)
     }
     Return
+    
